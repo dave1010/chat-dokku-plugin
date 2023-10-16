@@ -20,7 +20,7 @@ def app_list():
 @app.route('/self-update')
 def self_update():
     def generate():
-        process = subprocess.Popen(['/app/api-scripts/self_update.sh'], stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True)
+        process = subprocess.Popen(['/app/api-scripts/self-update.sh'], stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True)
         for line in iter(process.stdout.readline, ''):
             yield line
 
