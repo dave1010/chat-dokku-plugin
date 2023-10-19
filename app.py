@@ -1,11 +1,19 @@
 from flask import Flask, Response
+from src.auth import auth_bp, check_auth
 import subprocess
 
 app = Flask(__name__)
+app.register_blueprint(auth_bp)
+
+@app.before_request
+def global_before_request():
+    auth_result = check_auth()
+    if auth_result is not None:
+        return auth_result
 
 @app.route('/')
-def hello_world():
-    return 'Hello, World!'
+def home():
+    return 'Hello, World!\n'
 
 @app.route('/app-list')
 def app_list():
@@ -15,8 +23,6 @@ def app_list():
     except subprocess.CalledProcessError as e:
         return f"An error occurred: {e}"
 
-
-
 @app.route('/self-update')
 def self_update():
     def generate():
@@ -25,7 +31,6 @@ def self_update():
             yield line
 
     return Response(generate(), content_type='text/plain')
-
 
 if __name__ == '__main__':
     app.run()
