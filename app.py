@@ -1,11 +1,15 @@
 from flask import Flask, jsonify, request, send_from_directory
+from flask_cors import CORS
 from src.auth import auth_bp, check_auth
 from src.self_update import self_update_bp
 from src.tasks import tasks_bp
 from src.exec_util import exec_as_chatdokku, exec_script_as_chatdokku, scp_to_app, is_safe_path
 from src.api_docs import swaggerui_blueprint
 
+
 app = Flask(__name__)
+CORS(app)
+
 app.register_blueprint(auth_bp)
 app.register_blueprint(self_update_bp)
 app.register_blueprint(tasks_bp)
