@@ -2,6 +2,7 @@ import subprocess
 import re
 import os
 import tempfile
+import shlex
 
 SSH_OPTIONS = "-o ConnectTimeout=5"
 SSH_USER_HOST = "chatdokku@172.17.0.1"
@@ -15,7 +16,8 @@ def result_to_dict(result):
     }
 
 def exec_as_chatdokku(command):
-    ssh_command = f'ssh {SSH_OPTIONS} {SSH_USER_HOST} {command} 2>&1'
+    escaped_command = shlex.quote(command)
+    ssh_command = f'ssh {SSH_OPTIONS} {SSH_USER_HOST}"{escaped_command} 2>&1'
     result = subprocess.run(ssh_command, capture_output=True, text=True, shell=True)
     return result_to_dict(result)
 

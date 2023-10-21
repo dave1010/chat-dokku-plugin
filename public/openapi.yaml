@@ -93,7 +93,6 @@ paths:
   /write-file:
     post:
       summary: Write a file
-      description: Write a file
       requestBody:
         required: true
         content:
@@ -116,8 +115,7 @@ paths:
               - contents
   /exec-in-workdir:
     post:
-      summary: Write a file
-      description: Write a file
+      summary: Execute a command in an app working directory
       requestBody:
         required: true
         content:
