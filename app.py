@@ -18,7 +18,8 @@ def home():
 
 @app.route('/app-list')
 def app_list():
-    return jsonify(exec_as_chatdokku('dokku apps:list'))
+    result = exec_as_chatdokku('dokku apps:list | grep -v "My Apps"')
+    return jsonify(result['output'].strip().split('\n'))
 
 
 def generate_random_app_name():
