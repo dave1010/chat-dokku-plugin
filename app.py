@@ -3,7 +3,7 @@ from flask_cors import CORS
 from src.auth import auth_bp, check_auth
 from src.self_update import self_update_bp
 from src.tasks import tasks_bp
-from src.exec_util import exec_as_chatdokku, exec_script_as_chatdokku, scp_to_app, is_safe_path
+from src.exec_util import exec_as_chatdokku, exec_script_as_chatdokku, scp_to_app, is_safe_path, exec_command_in_app_workdir
 from src.api_docs import swaggerui_blueprint
 
 
@@ -63,7 +63,14 @@ def app_create():
     ---
     get:
       summary: "Create a new web app"
-      description: "Create a new web app"
+      description: "Create a new web app, defaulting to a unique random name"
+      parameters:
+        - name: app_name
+          in: query
+          description: Name of the app to create
+          required: false
+          schema:
+            type: string
       responses:
         200:
           description: "Success"
@@ -79,9 +86,8 @@ def app_create():
 def write_file():
     """Write a file
     ---
-    get:
+    post:
       summary: "Write a file"
-      description: "Write a file"
       requestBody:
         required: true
         content:
@@ -119,6 +125,42 @@ def write_file():
         return {"error": "contents is required"}, 400
 
     return jsonify(scp_to_app(file_contents=contents, app_name=app_name, path=path))
+
+
+
+@app.route('/exec-in-workdir', methods=['POST'])
+def exec_in_workdir():
+    """Execute a command in an app working directory
+    ---
+    post:
+      summary: "Execute a command in an app working directory"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                app_name:
+                  type: string
+                  description: "Name of the app where the command will be executed"
+                command:
+                  type: string
+                  description: "Shell command to run"
+              required:
+                - app_name
+                - command
+    """
+    app_name = request.json.get('app_name')
+    if not app_name:
+        return {"error": "App name is required. Check what apps exist with app-list."}, 400
+
+    command = request.json.get('command')
+    if not path:
+        return {"error": "path is required"}, 400
+
+    return jsonify(exec_command_in_app_workdir(app_name, command))
+
 
 
 if __name__ == '__main__':

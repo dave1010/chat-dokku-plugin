@@ -23,6 +23,9 @@ def exec_as_chatdokku(command):
 def exec_script_as_chatdokku(script):
     return exec_as_chatdokku(f'{WORK_DIR}/chat-dokku-plugin/scripts/local/{script}')
 
+def exec_command_in_app_workdir(app_name, command):
+    return exec_as_chatdokku(f'cd {WORK_DIR}/{app_name} && {command}')
+
 def is_safe_path(app_name, path):
     # Regex to check app_name and path only contain safe characters
     if not re.match("^[a-zA-Z0-9-]+$", app_name):

@@ -75,7 +75,14 @@ paths:
   /app-create:
     get:
       summary: Create a new web app
-      description: Create a new web app
+      description: Create a new web app, defaulting to a unique random name
+      parameters:
+      - name: app_name
+        in: query
+        description: Name of the app to create
+        required: false
+        schema:
+          type: string
       responses:
         '200':
           description: Success
@@ -84,7 +91,7 @@ paths:
               schema:
                 $ref: '#/components/schemas/ExecResult'
   /write-file:
-    get:
+    post:
       summary: Write a file
       description: Write a file
       requestBody:
@@ -107,6 +114,26 @@ paths:
               - app_name
               - path
               - contents
+  /exec-in-workdir:
+    post:
+      summary: Write a file
+      description: Write a file
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                app_name:
+                  type: string
+                  description: Name of the app where the command will be executed
+                command:
+                  type: string
+                  description: Shell command to run
+              required:
+              - app_name
+              - command
 info:
   title: Chat Dokku
   version: 1.0.0
