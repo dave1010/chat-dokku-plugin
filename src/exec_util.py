@@ -13,5 +13,5 @@ def exec_as_chatdokku(command):
     return result_to_dict(result)
 
 def exec_script_as_chatdokku(script):
-    return exec_as_chatdokku(f'/app/scripts/api/{script}')
+    return exec_as_chatdokku(f'/home/chatdokku/apps/chat-dokku-plugin/scripts/local/{script}')
 
