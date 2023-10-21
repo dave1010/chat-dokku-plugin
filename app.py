@@ -73,6 +73,32 @@ def app_create():
 
 @app.route('/write-file', methods=['POST'])
 def write_file():
+    """Write a file
+    ---
+    get:
+      summary: "Write a file"
+      description: "Write a file"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                app_name:
+                  type: string
+                  description: "Name of the app where the file will be written"
+                path:
+                  type: string
+                  description: "Path inside the app where the file will be written"
+                contents:
+                  type: string
+                  description: "Contents of the file to be written"
+              required:
+                - app_name
+                - path
+                - contents
+    """
     app_name = request.json.get('app_name')
     if not app_name:
         return {"error": "App name is required. Check what apps exist with app-list."}, 400
@@ -89,8 +115,6 @@ def write_file():
         return {"error": "contents is required"}, 400
 
     return jsonify(scp_to_app(file_contents=contents, app_name=app_name, path=path))
-
-
 
 
 if __name__ == '__main__':
