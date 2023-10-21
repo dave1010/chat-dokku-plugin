@@ -15,7 +15,7 @@ def login():
             return "Invalid PSK", 401
     return '''
         <form method="post">
-            PSK: <input type="password" name="psk">
+            Enter PSK: <input type="password" name="psk">
             <input type="submit">
         </form>
     '''
