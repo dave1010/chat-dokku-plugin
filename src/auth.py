@@ -34,6 +34,10 @@ def check_auth():
     if request.endpoint == 'auth.login':
         return None
 
+    # CORS
+    if request.method == 'OPTIONS':
+        return None
+
     auth_header = request.headers.get('Authorization')
     auth_cookie = request.cookies.get('auth')
 
