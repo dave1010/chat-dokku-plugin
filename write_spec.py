@@ -12,6 +12,8 @@ OPENAPI_SPEC = """
 servers:
 - url: http://127.0.0.1:5000/
   description: The development API server
+security:
+  - ApiKeyAuth: []
 """
 settings = yaml.safe_load(OPENAPI_SPEC)
 
