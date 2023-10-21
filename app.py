@@ -1,11 +1,15 @@
-from flask import Flask, jsonify, request
+from flask import Flask, jsonify, request, send_from_directory
 from src.auth import auth_bp, check_auth
 from src.self_update import self_update_bp
+from src.tasks import tasks_bp
 from src.exec_util import exec_as_chatdokku, exec_script_as_chatdokku, scp_to_app, is_safe_path
+from src.api_docs import swaggerui_blueprint
 
 app = Flask(__name__)
 app.register_blueprint(auth_bp)
 app.register_blueprint(self_update_bp)
+app.register_blueprint(tasks_bp)
+app.register_blueprint(swaggerui_blueprint)
 
 @app.before_request
 def global_before_request():
@@ -16,8 +20,28 @@ def home():
     return 'Hello, World!\n'
 
 
+@app.route('/openapi.yaml')
+def openapi_yaml():
+    return send_from_directory('./public', 'openapi.yaml', as_attachment=False, mimetype='application/x-yaml')
+
+
 @app.route('/app-list')
 def app_list():
+    """Get a list of all apps
+    ---
+    get:
+      summary: "List all Chat Dokku apps"
+      description: "Returns a list of all Chat Dokku apps."
+      responses:
+        200:
+          description: "Success"
+          content:
+            application/json:
+              schema:
+                type: "array"
+                items:
+                  type: "string"
+    """
     result = exec_as_chatdokku('dokku apps:list | grep -v "My Apps"')
     return jsonify(result['output'].strip().split('\n'))
 
@@ -29,9 +53,20 @@ def generate_random_app_name():
     number = random.randint(10, 99)
     return f"{random.choice(adjectives)}-{random.choice(nouns)}-{number}"
 
-
 @app.route('/app-create')
 def app_create():
+    """Create a new web app
+    ---
+    get:
+      summary: "Create a new web app"
+      description: "Create a new web app"
+      responses:
+        200:
+          description: "Success"
+          content:
+            application/json:
+              schema: ExecResultSchema
+    """
     app_name = request.args.get('app_name', generate_random_app_name())
     return jsonify(exec_script_as_chatdokku(f'create-app.sh {app_name}'))
 
@@ -57,5 +92,7 @@ def write_file():
 
 
 
+
 if __name__ == '__main__':
     app.run()
+

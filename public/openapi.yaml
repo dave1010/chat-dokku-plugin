@@ -1,0 +1,105 @@
+servers:
+- url: http://127.0.0.1:5000/
+  description: The development API server
+paths:
+  /login: {}
+  /logout: {}
+  /self-update: {}
+  /tasks:
+    get:
+      summary: Get all tasks
+      responses:
+        '200':
+          description: Returns all tasks with their statuses
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    detail:
+                      type: string
+                    done:
+                      type: boolean
+    post:
+      summary: Add or complete tasks
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                add:
+                  type: array
+                  items:
+                    type: string
+                complete:
+                  type: array
+                  items:
+                    type: string
+      responses:
+        '200':
+          description: Returns all tasks with their statuses
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    detail:
+                      type: string
+                    done:
+                      type: boolean
+  /api/docs/dist/{filename}: {}
+  /api/docs/{path}: {}
+  /: {}
+  /openapi.yaml: {}
+  /app-list:
+    get:
+      summary: List all Chat Dokku apps
+      description: Returns a list of all Chat Dokku apps.
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: string
+  /app-create:
+    get:
+      summary: Create a new web app
+      description: Create a new web app
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ExecResult'
+  /write-file: {}
+info:
+  title: Chat Dokku
+  version: 1.0.0
+openapi: 3.0.1
+components:
+  schemas:
+    ExecResult:
+      type: object
+      properties:
+        returncode:
+          type: integer
+        output:
+          type: string
+      required:
+      - output
+      - returncode
+  securitySchemes:
+    ApiKeyAuth:
+      type: apiKey
+      in: header
+      name: Authorization
