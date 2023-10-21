@@ -156,8 +156,8 @@ def exec_in_workdir():
         return {"error": "App name is required. Check what apps exist with app-list."}, 400
 
     command = request.json.get('command')
-    if not path:
-        return {"error": "path is required"}, 400
+    if not command:
+        return {"error": "command is required"}, 400
 
     return jsonify(exec_command_in_app_workdir(app_name, command))
 
