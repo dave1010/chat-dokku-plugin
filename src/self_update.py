@@ -1,4 +1,5 @@
 import subprocess
+import sys
 from flask import Blueprint, Response
 
 self_update_bp = Blueprint('self_update', __name__)
@@ -9,5 +10,7 @@ def self_update():
         process = subprocess.Popen(['ssh -o ConnectTimeout=5 chatdokku@172.17.0.1 /home/chatdokku/apps/chat-dokku-plugin/scripts/local/self-update.sh'], stdout=subprocess.PIPE, stderr=subprocess.STDOUT, text=True, shell=True)
         for line in iter(process.stdout.readline, ''):
             yield line
+            sys.stdout.flush()
+
 
     return Response(generate(), content_type='text/plain')
