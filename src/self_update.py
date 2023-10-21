@@ -1,4 +1,3 @@
-import os
 import subprocess
 from flask import Blueprint, Response
 
