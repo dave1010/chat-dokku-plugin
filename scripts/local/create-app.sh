@@ -3,7 +3,7 @@ set -e
 
 APP_NAME=$1
 
-if dokku apps:exists $APP_NAME; then
+if dokku apps:exists $APP_NAME > /dev/null; then
   echo "Error: App $APP_NAME already exists." >&2
   exit 1
 fi
