@@ -15,9 +15,12 @@ def result_to_dict(result):
         'output': result.stdout,
     }
 
-def exec_as_chatdokku(command):
+def construct_ssh_command(command):
     escaped_command = shlex.quote(command)
-    ssh_command = f'ssh {SSH_OPTIONS} {SSH_USER_HOST} {escaped_command} 2>&1'
+    return f'ssh {SSH_OPTIONS} {SSH_USER_HOST} {escaped_command} 2>&1'
+
+def exec_as_chatdokku(command):
+    ssh_command = construct_ssh_command(command)
     result = subprocess.run(ssh_command, capture_output=True, text=True, shell=True)
     return result_to_dict(result)
 
@@ -42,7 +45,7 @@ def is_safe_path(app_name, path):
     normalized_path = os.path.normpath(full_path)
 
     # Check that the normalized path is still under the intended directory
-    if not normalized_path.startswith(WORK_DIR + "/"):
+    if not normalized_path.startswith(os.path.normpath(WORK_DIR) + os.sep + app_name):
         return False
 
     return True

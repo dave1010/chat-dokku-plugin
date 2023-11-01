@@ -10,6 +10,10 @@ Plugin for Chat Dokku
 
     PSK=secret flask run --debug
 
+## Running tests
+
+    python -m unittest discover tests
+
 # FAQ
 
 How do I find the PSK?
