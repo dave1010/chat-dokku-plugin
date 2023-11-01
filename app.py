@@ -10,6 +10,7 @@ from src.api_docs import swaggerui_blueprint
 app = Flask(__name__)
 CORS(app)
 
+app.config['REDIRECT_ROUTE'] = 'home'
 app.register_blueprint(auth_bp)
 app.register_blueprint(self_update_bp)
 app.register_blueprint(tasks_bp)

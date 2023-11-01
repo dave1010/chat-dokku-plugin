@@ -1,5 +1,5 @@
 import os
-from flask import Blueprint, request, make_response, redirect, url_for
+from flask import Blueprint, request, make_response, redirect, url_for, current_app
 
 auth_bp = Blueprint('auth', __name__)
 
@@ -8,7 +8,8 @@ def login():
     if request.method == 'POST':
         psk = request.form.get('psk')
         if psk == os.environ.get('PSK'):
-            resp = make_response(redirect(url_for('home')))
+            redirect_route = current_app.config.get('REDIRECT_ROUTE', 'home')
+            resp = make_response(redirect(url_for(redirect_route)))
             resp.set_cookie('auth', psk, secure=True, httponly=True)
             return resp
         else:
