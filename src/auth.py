@@ -35,6 +35,11 @@ def check_auth():
     if request.endpoint == 'auth.login':
         return None
 
+    # public endpoints
+    view_func = current_app.view_functions.get(request.endpoint)
+    if view_func and getattr(view_func, 'is_public', False):
+        return None
+
     # CORS
     if request.method == 'OPTIONS':
         return None

@@ -123,6 +123,7 @@ def write_file():
 
     contents = request.json.get('contents')
     if not contents:
+        # todo: handle empty
         return {"error": "contents is required"}, 400
 
     return jsonify(scp_to_app(file_contents=contents, app_name=app_name, path=path))
