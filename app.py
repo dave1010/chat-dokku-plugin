@@ -29,12 +29,20 @@ def home():
 def openapi_yaml():
     return send_from_directory('./public', 'openapi.yaml', as_attachment=False, mimetype='application/x-yaml')
 
+openapi_yaml.is_public = True
+
+@app.route('/.well-known/ai-plugin.json')
+def ai_plugin_yaml():
+    return send_from_directory('./public', 'ai-plugin.json', as_attachment=False, mimetype='application/json')
+
+ai_plugin_yaml.is_public = True
 
 @app.route('/app-list')
 def app_list():
     """Get a list of all apps
     ---
     get:
+      operationId: getAppList
       summary: "List all Chat Dokku apps"
       description: "Returns a list of all Chat Dokku apps."
       responses:
@@ -63,6 +71,7 @@ def app_create():
     """Create a new web app
     ---
     get:
+      operationId: createApp
       summary: "Create a new web app"
       description: "Create a new web app, defaulting to a unique random name"
       parameters:
@@ -88,6 +97,7 @@ def write_file():
     """Write a file
     ---
     post:
+      operationId: writeFile
       summary: "Write a file"
       requestBody:
         required: true
@@ -135,6 +145,7 @@ def exec_in_workdir():
     """Execute a command in an app working directory
     ---
     post:
+      operationId: execInWorkDir
       summary: "Execute a command in an app working directory"
       requestBody:
         required: true

@@ -59,8 +59,10 @@ paths:
   /api/docs/{path}: {}
   /: {}
   /openapi.yaml: {}
+  /.well-known/ai-plugin.json: {}
   /app-list:
     get:
+      operationId: getAppList
       summary: List all Chat Dokku apps
       description: Returns a list of all Chat Dokku apps.
       responses:
@@ -74,6 +76,7 @@ paths:
                   type: string
   /app-create:
     get:
+      operationId: createApp
       summary: Create a new web app
       description: Create a new web app, defaulting to a unique random name
       parameters:
@@ -92,6 +95,7 @@ paths:
                 $ref: '#/components/schemas/ExecResult'
   /write-file:
     post:
+      operationId: writeFile
       summary: Write a file
       requestBody:
         required: true
@@ -115,6 +119,7 @@ paths:
               - contents
   /exec-in-workdir:
     post:
+      operationId: execInWorkDir
       summary: Execute a command in an app working directory
       requestBody:
         required: true
